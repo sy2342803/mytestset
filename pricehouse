@@ -1,0 +1,44 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+
+pd.set_option('display.width', 999)           # 출력 너비 무제한
+pd.set_option('display.max_columns', 999)     # 모든 열 출력
+pd.set_option('display.max_colwidth', 999)
+
+# 1. 데이터셋 로딩 (seaborn에서 제공하는 boston 데이터는 없으므로 외부 링크 사용)
+url = "https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
+df = pd.read_csv(url)
+
+
+
+X = df.drop('medv', axis=1)   # 종속 변수 제외
+y = df['medv']                # 종속 변수: 주택 가격
+
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+
+y_pred = model.predict(X_test)
+r2 = r2_score(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+intercept = model.intercept_
+coefficients = model.coef_
+
+# 결과 출력
+print("회귀 계수:")
+for name, coef in zip(X.columns, coefficients):
+    print(f"{name}: {round(coef, 4)}")
+
+print("절편 (Intercept):", round(intercept, 4))
+print("R^2 (설명력):", round(r2, 4))
+print("평균제곱오차 (MSE):", round(mse, 4))
