@@ -1,0 +1,24 @@
+import streamlit as st
+
+st.write('Hello world!')
+t.title("📰 AI 가짜 뉴스 판별기")
+
+model = joblib.load('model.pkl')  # 학습된 모델 불러오기
+
+user_input = st.text_area("뉴스 기사를 입력하세요:")
+
+if st.button("판별하기"):
+    prediction = model.predict([user_input])[0]
+    st.success(f"판별 결과: **{prediction}**")
+
+# 아래는 모델 성능 지표 시각화용
+if st.checkbox("모델 성능 보기"):
+    # 정확도, confusion matrix 등을 보여주는 코드 호출
+    st.subheader("📊 Confusion Matrix")
+    plot_confusion_matrix(y_test, model.predict(X_test))
+
+import streamlit as st
+import joblib  # 저장된 모델 로드
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+s
